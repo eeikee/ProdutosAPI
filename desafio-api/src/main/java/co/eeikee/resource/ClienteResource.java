@@ -84,7 +84,7 @@ public class ClienteResource {
 	@PutMapping("/{id}")
 	public ResponseEntity<Cliente> atualizar(@ApiParam(value = "Id de um cliente", example = "1") @PathVariable Long id,
 			@ApiParam(name = "Corpo", value = "Representação de um cliente") @Validated @RequestBody Cliente cliente) {
-		return ResponseEntity.ok(cs.atualizarCategoria(id, cliente));
+		return ResponseEntity.ok(cs.atualizarCliente(id, cliente));
 	}
 
 	@GetMapping("/asc")

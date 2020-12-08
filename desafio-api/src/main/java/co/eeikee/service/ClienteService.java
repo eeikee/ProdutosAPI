@@ -14,11 +14,13 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository cr;
 
-	public Cliente atualizarCategoria(Long id, Cliente cliente) {
-		if (cr.getOne(id) == null) {
+	public Cliente atualizarCliente(Long id, Cliente cliente) {
+		try {
+			Cliente clienteSalvo = cr.getOne(id);
+			BeanUtils.copyProperties(cliente, clienteSalvo, "id");
+			return cr.save(clienteSalvo);
+		} catch (Exception e) {
 			throw new EmptyResultDataAccessException(1);
-		}
-		BeanUtils.copyProperties(cliente, cr.getOne(id), "id");
-		return cr.save(cr.getOne(id));
+		}	
 	}
 }
