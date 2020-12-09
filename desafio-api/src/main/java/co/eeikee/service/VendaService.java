@@ -1,8 +1,11 @@
 package co.eeikee.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,5 +93,16 @@ public class VendaService {
 			backup.setQuantidade(backup.getQuantidade()-1);
 			pr.save(backup);
 		}
+	}
+
+	public Date dataCompra(String dia, String mes, String ano) {
+		String data = dia+"/"+mes+"/"+ano;
+		Date dataCompra = null;
+		try {
+			dataCompra = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return dataCompra;  
 	}
 }

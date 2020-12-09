@@ -43,12 +43,12 @@ public class VendaResource {
 
 	@Autowired
 	private ApplicationEventPublisher aep;
-	
+
 	@GetMapping
 	@ApiOperation("Listar todas as vendas")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
 	public List<VendaDTO> listarProdutos() {
-		return vs.getVendas(vr.findAll()); 
+		return vs.getVendas(vr.findAll());
 	}
 
 	@PostMapping
@@ -66,11 +66,9 @@ public class VendaResource {
 	@ApiOperation("Buscar por ID")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
 	@GetMapping("/{id}")
-	public ResponseEntity<Venda> buscarPeloId(
+	public ResponseEntity<VendaDTO> buscarPeloId(
 			@ApiParam(value = "Id de uma venda", example = "1") @PathVariable Long id) {
-		return vr.getOne(id) != null
-				? ResponseEntity.ok(vr.getOne(id))
-				: ResponseEntity.notFound().build();
+		return vr.getOne(id) != null ? ResponseEntity.ok(vs.convertTVendaDTO(vr.getOne(id))) : ResponseEntity.notFound().build();
 	}
 
 	@ApiOperation("Exclui venda")
@@ -80,13 +78,13 @@ public class VendaResource {
 	public void remover(@ApiParam(value = "Id de uma venda", example = "1") @PathVariable Long id) {
 		vr.deleteById(id);
 	}
-	
+
 	@ApiOperation("Atualizar venda")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
 	@PutMapping("/{id}")
-	public ResponseEntity<Venda> atualizar(@ApiParam(value = "Id de uma venda", example = "1") @PathVariable Long id,
+	public ResponseEntity<VendaDTO> atualizar(@ApiParam(value = "Id de uma venda", example = "1") @PathVariable Long id,
 			@ApiParam(name = "Corpo", value = "Representação de uma venda") @Validated @RequestBody Venda venda) {
-		return ResponseEntity.ok(vs.atualizarProduto(id, venda));
+		return !vr.findById(id).isEmpty() ? ResponseEntity.ok(vs.convertTVendaDTO(vs.atualizarProduto(id, venda))) : ResponseEntity.notFound().build();
 	}
 
 	@GetMapping("/asc")
@@ -94,9 +92,8 @@ public class VendaResource {
 	@ApiOperation("Listar as vendas em ordem alfabética crescente por nome do cliente")
 
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
-	public ResponseEntity<List<Venda>> listarCrescenteAlfabetico() {
-		return !vr.findAllByOrderByClienteAsc().isEmpty()
-				? ResponseEntity.ok(vr.findAllByOrderByClienteAsc())
+	public ResponseEntity<List<VendaDTO>> listarCrescenteAlfabetico() {
+		return !vr.findAllByOrderByDataCompraAsc().isEmpty() ? ResponseEntity.ok(vs.getVendas(vr.findAllByOrderByDataCompraAsc()))
 				: ResponseEntity.notFound().build();
 	}
 
@@ -105,9 +102,8 @@ public class VendaResource {
 	@ApiOperation("Lista as vendas em ordem alfabética decrescente por nome do cliente")
 
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
-	public ResponseEntity<List<Venda>> listarDecrescenteAlfabetico() {
-		return !vr.findAllByOrderByClienteDesc().isEmpty()
-				? ResponseEntity.ok(vr.findAllByOrderByClienteDesc())
+	public ResponseEntity<List<VendaDTO>> listarDecrescenteAlfabetico() {
+		return !vr.findAllByOrderByDataCompraDesc().isEmpty() ? ResponseEntity.ok(vs.getVendas(vr.findAllByOrderByDataCompraDesc()))
 				: ResponseEntity.notFound().build();
 	}
 
@@ -115,12 +111,10 @@ public class VendaResource {
 
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
 
-	@GetMapping("/nome/{nome}")
-	public ResponseEntity<List<Venda>> buscarPeloNome(
-
-			@ApiParam(value = "Nome de um cliente", example = "Notebook") @PathVariable String nome) {
-		return !vr.findByClienteContaining(nome).isEmpty()
-				? ResponseEntity.ok(vr.findByClienteContaining(nome))
+	@GetMapping("/data/{dia}/{mes}/{ano}")
+	public ResponseEntity<List<VendaDTO>> buscarPeloNome(
+			@ApiParam(value = "Dia da venda", example = "01") @PathVariable String dia, @ApiParam(value = "Mês da venda", example = "01")@PathVariable String mes, @ApiParam(value = "Ano da venda", example = "2020") @PathVariable String ano) {   
+		return !vr.findByDataCompra(vs.dataCompra(dia,mes,ano)).isEmpty() ? ResponseEntity.ok(vs.getVendas(vr.findByDataCompra(vs.dataCompra(dia, mes, ano))))
 				: ResponseEntity.notFound().build();
 	}
 

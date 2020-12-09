@@ -22,7 +22,7 @@ public class SpringFoxConfig implements WebMvcConfigurer{
 	@Bean
 	public Docket apiDocket() {
 	 return new Docket(DocumentationType.SWAGGER_2).select()
-			 .apis(RequestHandlerSelectors.basePackage("com.eeikee"))
+			 .apis(RequestHandlerSelectors.basePackage("co.eeikee"))
 			 .build().apiInfo(ApiInfo()).tags(new Tag("Clientes", "Clientes do sistema de venda"),
 					 new Tag("Fornecedores", "Fornecedores dos produtos"),
 					 new Tag("Produtos", "Produtos disponíveis no sistema"),

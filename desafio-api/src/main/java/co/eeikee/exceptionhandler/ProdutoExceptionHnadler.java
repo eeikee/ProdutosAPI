@@ -1,5 +1,6 @@
 package co.eeikee.exceptionhandler;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +69,14 @@ public class ProdutoExceptionHnadler extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler({DataIntegrityViolationException.class})
 	public ResponseEntity<Object> HandleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest wr){
+		String msgUser = messageSource.getMessage("recurso.operacao-nao-permitida",null,LocaleContextHolder.getLocale());
+		String msgDev = ExceptionUtils.getRootCauseMessage(ex);
+		List<Erro> erros = Arrays.asList(new Erro(msgUser,msgDev));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, wr);
+	}
+	
+	@ExceptionHandler({ParseException.class})
+	public ResponseEntity<Object> HandleParseException(ParseException ex, WebRequest wr){
 		String msgUser = messageSource.getMessage("recurso.operacao-nao-permitida",null,LocaleContextHolder.getLocale());
 		String msgDev = ExceptionUtils.getRootCauseMessage(ex);
 		List<Erro> erros = Arrays.asList(new Erro(msgUser,msgDev));
