@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.eeikee.event.RecursoCriadoEvent;
+import co.eeikee.model.Cliente;
 import co.eeikee.model.Fornecedor;
 import co.eeikee.model.FornecedorDTO;
 import co.eeikee.model.FornecedorProdutoDTO;
@@ -69,8 +70,9 @@ public class FornecedorResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<FornecedorProdutoDTO> buscarPeloId(
 			@ApiParam(value = "Id de um fornecedor", example = "1") @PathVariable Long id) {
-		return fs.convertToFornecedorProdutoDTO(fr.getOne(id)) != null ? ResponseEntity.ok(fs.convertToFornecedorProdutoDTO(fr.getOne(id))) : ResponseEntity.notFound().build();
+		return !fr.findById(id).isEmpty() ? ResponseEntity.ok(fs.convertToFornecedorProdutoDTO(fr.getOne(id))) : ResponseEntity.notFound().build();
 	}
+	
 
 	@ApiOperation("Exclui fornecedor")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")

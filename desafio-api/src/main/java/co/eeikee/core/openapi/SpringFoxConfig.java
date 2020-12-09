@@ -2,6 +2,7 @@ package co.eeikee.core.openapi;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,7 +22,7 @@ public class SpringFoxConfig implements WebMvcConfigurer{
 	@Bean
 	public Docket apiDocket() {
 	 return new Docket(DocumentationType.SWAGGER_2).select()
-			 .apis(RequestHandlerSelectors.any())
+			 .apis(RequestHandlerSelectors.basePackage("com.eeikee"))
 			 .build().apiInfo(ApiInfo()).tags(new Tag("Clientes", "Clientes do sistema de venda"),
 					 new Tag("Fornecedores", "Fornecedores dos produtos"),
 					 new Tag("Produtos", "Produtos disponíveis no sistema"),
@@ -43,4 +44,9 @@ public class SpringFoxConfig implements WebMvcConfigurer{
 		
 	registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
+	
+     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+         endpoints
+             .pathMapping("/oauth/token", "/api/oauth/token");
+     }
 }

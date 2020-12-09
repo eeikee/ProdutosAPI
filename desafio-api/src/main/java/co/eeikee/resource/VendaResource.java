@@ -57,6 +57,7 @@ public class VendaResource {
 	public ResponseEntity<VendaDTO> criar(
 			@ApiParam(name = "Corpo", value = "Representação de uma nova venda") @Valid @RequestBody Venda venda,
 			HttpServletResponse response) {
+		vs.quantidadeProduto(venda);
 		vr.save(venda);
 		aep.publishEvent(new RecursoCriadoEvent(this, response, venda.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(vs.convertTVendaDTO(vr.getOne(venda.getId())));

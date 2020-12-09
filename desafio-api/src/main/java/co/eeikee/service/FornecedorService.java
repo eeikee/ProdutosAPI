@@ -40,7 +40,7 @@ public class FornecedorService {
 		fpdto.setNome(fornecedor.getNome());
 		fpdto.setCnpj(fornecedor.getCnpj());
 		for (Produto produto : pr.findByFornecedor(fornecedor)) {
-			ProdutoDTO pdto = new ProdutoDTO(produto.getNome(), produto.getCodigoProduto(), produto.getValor(),produto.isPromocao(), produto.getValorPromo(), produto.getCategoria(), produto.getImagem(), produto.getQuantidade());
+			ProdutoDTO pdto = new ProdutoDTO(produto.getNome(), produto.getCodigoProduto(), produto.getValor(),produto.isPromocao(), produto.getValorPromo(), produto.getCategoria(), produto.getImagem());
 			produtoDTOs.add(pdto);
 		}
 		fpdto.setProdutos(produtoDTOs);

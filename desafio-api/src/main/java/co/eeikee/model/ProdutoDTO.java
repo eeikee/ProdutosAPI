@@ -17,8 +17,6 @@ public class ProdutoDTO {
 	private String categoria;
 	
 	private String imagem;
-	
-	private Long quantidade;
 
 	public String getNome() {
 		return nome;
@@ -76,16 +74,8 @@ public class ProdutoDTO {
 		this.imagem = imagem;
 	}
 
-	public Long getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Long quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public ProdutoDTO(String nome, String codigoProduto, BigDecimal valor, boolean promocao,
-			BigDecimal valorPromo, String categoria, String imagem, Long quantidade) {
+			BigDecimal valorPromo, String categoria, String imagem) {
 		this.nome = nome;
 		this.codigoProduto = codigoProduto;
 		this.valor = valor;
@@ -93,7 +83,6 @@ public class ProdutoDTO {
 		this.valorPromo = valorPromo;
 		this.categoria = categoria;
 		this.imagem = imagem;
-		this.quantidade = quantidade;
 	}
 	
 }
