@@ -9,15 +9,25 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Representação de um cliente (DTO)")
 public class ClienteDTO {
+
+	@ApiModelProperty(value = "Nome do cliente", example = "Fulano")
 	private String nome;
 
+	@ApiModelProperty(value = "Email do cliente", example = "email@host.com")
 	private String email;
 
+	@ApiModelProperty(value = "Senha do cliente", example = "Sn2020c1")
 	private String senha;
 
+	@ApiModelProperty(value = "Documento do cliente", example = "123.456.789-10")
 	private String documento;
 
+	@ApiModelProperty(value = "Data de cadastro do cliente", example = "01/01/2020")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
@@ -71,6 +81,5 @@ public class ClienteDTO {
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
-	
-	
+
 }

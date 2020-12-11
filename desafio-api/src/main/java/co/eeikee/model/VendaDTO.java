@@ -11,18 +11,28 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Representação de uma venda (DTO)")
 public class VendaDTO {
 
+	@ApiModelProperty(value = "ID da venda", example = "1")
 	private Long id;
 	
+	@ApiModelProperty(value = "Fornecedor da venda", example = "1")
 	private FornecedorDTO fornecedor;
 
+	@ApiModelProperty(value = "Cliente da venda", example = "1")
 	private ClienteDTO cliente;
 	
+	@ApiModelProperty(value = "Produtos da venda", example = "1")
 	private List<ProdutoDTO> produtos;
 	
+	@ApiModelProperty(value = "Valor total da venda", example = "180.00")
 	private BigDecimal totalCompra; 
 	
+	@ApiModelProperty(value = "Data da venda", example = "1")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)

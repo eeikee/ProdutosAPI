@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +23,11 @@ public class FornecedorService {
 	@Autowired
 	private ProdutoRepository pr;
 	
-	public Fornecedor atualizarCategoria(Long id, Fornecedor fornecedor) {
-		BeanUtils.copyProperties(fornecedor, fr.getOne(id), "id");
-		return fr.save(fr.getOne(id));
+	public Fornecedor atualizarFornecedor(Long id, Fornecedor fornecedor) {
+		Fornecedor fornecedorSalvo = fr.getOne(id);
+		fornecedorSalvo.setNome(fornecedor.getNome());
+		fornecedorSalvo.setCnpj(fornecedor.getCnpj());
+		return fr.save(fornecedorSalvo);
 	}
 	
 	public List<FornecedorProdutoDTO> getFornecedorProduto(List<Fornecedor> fornecedores){

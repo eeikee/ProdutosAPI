@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import co.eeikee.model.FornecedorDTO;
@@ -29,6 +30,12 @@ public class ProdutoService {
 	
 	public List<ProdutoFornecedorDTO> getProdutoFornecedor(List<Produto> produtos){
 		return ((List<Produto>) produtos).stream().map(this::convertTProdutoFornecedorDTO).collect(Collectors.toList());
+	}
+	
+	public void validaFornecedor(Produto produto) {
+		if (fr.findById(produto.getFornecedor().getId()).isEmpty()) {
+			throw new EmptyResultDataAccessException(1);
+		}
 	}
 	
 	public ProdutoFornecedorDTO convertTProdutoFornecedorDTO(Produto produto){

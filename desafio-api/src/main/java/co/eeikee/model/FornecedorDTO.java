@@ -1,9 +1,15 @@
 package co.eeikee.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Representação parcial de um fornecedor (DTO)")
 public class FornecedorDTO {
 
+	@ApiModelProperty(value = "Nome do fornecedor", example = "Amazon")
 	private String nome;
 
+	@ApiModelProperty(value = "CNPJ do fornecedor", example = "15.436.940/0001-03")
 	private String cnpj;
 
 

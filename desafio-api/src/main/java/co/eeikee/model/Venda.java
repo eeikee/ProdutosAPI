@@ -20,30 +20,40 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "venda")
+@ApiModel(description = "Representação de uma venda")
 public class Venda {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(value = "ID da venda", example = "1")
 	private Long id;
 	
 	@ManyToOne
+	@ApiModelProperty(value = "Fornecedor da venda", example = "1")
 	@JoinColumn(name = "fornecedor_id")
 	private Fornecedor fornecedor;
 	
 	@ManyToOne
+	@ApiModelProperty(value = "Cliente da venda", example = "1")
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
 	@ManyToMany
+	@ApiModelProperty(value = "Produtos da venda", example = "1")
 	@JoinTable(
 			name= "venda_produto",
 			joinColumns = @JoinColumn(name="venda_id"),
 			inverseJoinColumns = @JoinColumn(name="produto_id"))
 	private List<Produto> produtos;
 	
+	@ApiModelProperty(value = "Valor total da venda", example = "180.00")
 	private BigDecimal totalCompra; 
 	
+	@ApiModelProperty(value = "Data da venda", example = "1")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)

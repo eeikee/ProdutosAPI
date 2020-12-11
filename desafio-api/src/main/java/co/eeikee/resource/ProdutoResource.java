@@ -47,8 +47,9 @@ public class ProdutoResource {
 	@GetMapping
 	@ApiOperation("Listar todos os produtos")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
-	public List<ProdutoFornecedorDTO> listarProdutos() {
-		return ps.getProdutoFornecedor(pr.findAll());
+	public ResponseEntity<List<ProdutoFornecedorDTO>> listarProdutos() {
+		return !pr.findAll().isEmpty() ? ResponseEntity.ok(ps.getProdutoFornecedor(pr.findAll()))
+				: ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
@@ -57,10 +58,12 @@ public class ProdutoResource {
 	public ResponseEntity<ProdutoFornecedorDTO> criar(
 			@ApiParam(name = "Corpo", value = "Representação de um novo fornecedor") @Valid @RequestBody Produto produto,
 			HttpServletResponse response) {
+		ps.validaFornecedor(produto);
 		produto.setCodigoProduto();
 		pr.save(produto);
 		aep.publishEvent(new RecursoCriadoEvent(this, response, produto.getId()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(ps.convertTProdutoFornecedorDTO(pr.getOne(produto.getId())));
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ps.convertTProdutoFornecedorDTO(pr.getOne(produto.getId())));
 	}
 
 	@ApiOperation("Buscar por ID")
@@ -84,9 +87,10 @@ public class ProdutoResource {
 	@ApiOperation("Atualizar produto")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
 	@PutMapping("/{id}")
-	public ResponseEntity<Produto> atualizar(@ApiParam(value = "Id de um produto", example = "1") @PathVariable Long id,
+	public ResponseEntity<ProdutoFornecedorDTO> atualizar(
+			@ApiParam(value = "Id de um produto", example = "1") @PathVariable Long id,
 			@ApiParam(name = "Corpo", value = "Representação de um produto") @Validated @RequestBody Produto produto) {
-		return ResponseEntity.ok(ps.atualizarProduto(id, produto));
+		return ResponseEntity.ok(ps.convertTProdutoFornecedorDTO(ps.atualizarProduto(id, produto)));
 	}
 
 	@GetMapping("/asc")

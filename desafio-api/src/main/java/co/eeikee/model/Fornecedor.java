@@ -2,6 +2,7 @@ package co.eeikee.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,21 +12,33 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "fornecedor")
+@ApiModel(description = "Representação de um fornecedor")
 public class Fornecedor {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(value = "ID do fornecedor", example = "1")
 	private Long id;
 
 	@NotBlank
+	@ApiModelProperty(value = "Nome do fornecedor", example = "Amazon")
 	private String nome;
 
 	@NotBlank
+	@ApiModelProperty(value = "CNPJ do fornecedor", example = "15.436.940/0001-03")
 	private String cnpj;
 
-	@OneToMany(mappedBy = "fornecedor", fetch = FetchType.EAGER, orphanRemoval = true)
+	@ApiModelProperty(value = "Produtos do fornecedor")
+	@OneToMany(mappedBy = "fornecedor", fetch = FetchType.EAGER,cascade = { CascadeType.ALL }, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Produto> produtos;
 
 	public Long getId() {

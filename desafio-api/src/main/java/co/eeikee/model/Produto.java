@@ -13,38 +13,55 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "produto")
+@ApiModel(description = "Representação de um produto")
 public class Produto {
 	@Id
+	@ApiModelProperty(value = "ID do produto", example = "1")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotBlank
+	@ApiModelProperty(value = "Nome do produto", example = "Headset")
 	private String nome;
 	
+	@ApiModelProperty(value = "Codigo do produto", example = "55648-945")
 	private String codigoProduto;
 	
 	@NotNull
+	@PositiveOrZero
+	@ApiModelProperty(value = "Valor do produto", example = "100.00")
 	private BigDecimal valor;
 	
 	@NotNull
+	@ApiModelProperty(value = "Status de promoção do produto", example = "true")
 	private boolean promocao;
 	
+	@PositiveOrZero
+	@ApiModelProperty(value = "Valor do produto em promoção", example = "80.00")
 	private BigDecimal valorPromo;
 	
 	@NotBlank
+	@ApiModelProperty(value = "Categoria do produto", example = "Periféricos")
 	private String categoria;
 	
 	@NotBlank
+	@ApiModelProperty(value = "Codigo do produto", example = "headset_amazon_2020.jpg")
 	private String imagem;
 	
 	@NotNull
+	@ApiModelProperty(value = "Quantidade do produto", example = "1")
 	private Long quantidade;
 	
+	@ApiModelProperty(value = "Fornecedor do produto", example = "1")
 	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "fornecedor_id")
 	private Fornecedor fornecedor;

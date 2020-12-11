@@ -4,26 +4,15 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
-import co.eeikee.exceptionhandler.ProdutoExceptionHnadler.Erro;
-import co.eeikee.model.Cliente;
 import co.eeikee.model.ClienteDTO;
 import co.eeikee.model.FornecedorDTO;
 import co.eeikee.model.Produto;
@@ -95,7 +84,7 @@ public class VendaService {
 		}
 	}
 
-	public Date dataCompra(String dia, String mes, String ano) {
+	public Date dataCompraCompleta(String dia, String mes, String ano) {
 		String data = dia+"/"+mes+"/"+ano;
 		Date dataCompra = null;
 		try {
@@ -104,5 +93,27 @@ public class VendaService {
 			e.printStackTrace();
 		}
 		return dataCompra;  
+	}
+
+	public List<VendaDTO> dataCompraMesDia(String dia, String mes) {
+		List<VendaDTO> buscaDiaMes = new ArrayList<>();
+		for (Venda venda : vr.findAll()) {
+			String[] diaMes = venda.getDataCompra().toString().split("-");
+			if (diaMes[2].equals(dia) || diaMes[2].equals("0"+dia) && diaMes[1].equals(mes) || diaMes[1].equals("0"+mes)) {
+				buscaDiaMes.add(convertTVendaDTO(venda));
+			}
+		}
+		return buscaDiaMes;
+	}
+
+	public List<VendaDTO> dataCompraDia(String dia) {
+		List<VendaDTO> buscaDia = new ArrayList<>();
+		for (Venda venda : vr.findAll()) {
+			String[] diaMes = venda.getDataCompra().toString().split("-");
+			if (diaMes[2].equals(dia) || diaMes[2].equals("0"+dia)) {
+				buscaDia.add(convertTVendaDTO(venda));
+			}
+		}
+		return buscaDia;
 	}
 }

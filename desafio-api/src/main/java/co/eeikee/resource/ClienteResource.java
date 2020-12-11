@@ -47,8 +47,8 @@ public class ClienteResource {
 	@GetMapping
 	@ApiOperation("Listar todos os clientes")
 	@ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, allowEmptyValue = false, paramType = "header", example = "Bearer access_token")
-	public List<Cliente> listarClientes() {
-		return cr.findAll();
+	public ResponseEntity<List<Cliente>> listarClientes() {
+		return !cr.findAll().isEmpty() ? ResponseEntity.ok(cr.findAll()) : ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
